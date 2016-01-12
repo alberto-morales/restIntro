@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    					http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+  <jaxrs:server id="bookservice" address="/bookservice">
+	    <jaxrs:serviceBeans>
+	      <ref bean="bookserviceimpl" />
+	    </jaxrs:serviceBeans>
+		<jaxrs:providers>
+            <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+                <property name="dropRootElement" value="true" />
+                <property name="serializeAsArray" value="true" />
+                <property name="dropCollectionWrapperElement" value="true" />
+            </bean>
+		</jaxrs:providers>
+  </jaxrs:server>
+
+    <bean id="message" class="eu.albertomorales.webIntro.impl.MessageImpl">
+        <property name="text" value="Spring is fun." />
+    </bean>
+
+    <bean id="catalog" class="eu.albertomorales.restIntro.model.impl.CatalogImpl" />
+
+    <bean id="bookBuilder" class="eu.albertomorales.restIntro.services.builder.impl.BookBuilder" />
+
+    <bean id="bookserviceimpl" class="eu.albertomorales.restIntro.services.rest.BookService">
+        <property name="catalog" ref="catalog" />
+    	<property name="builder" ref="bookBuilder" />
+    </bean>
+
+</beans>
